@@ -15,8 +15,10 @@
     {"name":"FileDropper","order":3,"path":"extensions/FileDropper/FileDropper.yy",},
     {"name":"Changelog","order":5,"path":"notes/Changelog/Changelog.yy",},
     {"name":"obj_file_demo","order":1,"path":"objects/obj_file_demo/obj_file_demo.yy",},
-    {"name":"rm_file_demo","order":2,"path":"rooms/rm_file_demo/rm_file_demo.yy",},
+    {"name":"dll_functions","order":3,"path":"scripts/dll_functions/dll_functions.yy",},
     {"name":"file_dropper_get_files","order":1,"path":"scripts/file_dropper_get_files/file_dropper_get_files.yy",},
     {"name":"file_dropper_version","order":2,"path":"scripts/file_dropper_version/file_dropper_version.yy",},
+    {"name":"initialize_editor","order":2,"path":"scripts/initialize_editor/initialize_editor.yy",},
+    {"name":"other_functions","order":1,"path":"scripts/other_functions/other_functions.yy",},
   ],
 }
