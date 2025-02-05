@@ -6,7 +6,7 @@
 	#macro FRAMERATE global.framerate
 
 	global.init_objects_array = [
-		obj_file_demo
+		o_debug
 	];
 	#macro INIT_OBJ_ARRAY global.init_objects_array
 
@@ -15,8 +15,17 @@
 	
 	#macro LT_BLUE #0099ff
 	#macro FORCE_NOTEPAD false
-	//show_debug_overlay(true, true);
 	
-	#macro MAX_IMPORT_IMG_SIZE 2048 // 2k images max
+	// use run_command_SHOW or hide the consoles
+	#macro SHOW_COMMAND_CONSOLE true
 
+	
+	if (!directory_exists("Downloads")) {
+		new debug_text("creating Downloads folder");
+		directory_create("Downloads");
+	}
+	global.downloads = working_directory + "Downloads\\";
+	#macro DOWNLOADS global.downloads
+	new debug_text(DOWNLOADS);
+	
 #endregion
