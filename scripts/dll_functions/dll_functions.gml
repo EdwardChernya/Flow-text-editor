@@ -14,11 +14,10 @@ function file_type(path, _type) {
 	if (ext == _type) return true;
 	return false;
 }
-
 // voids have to be set as ty_real return type
 global.get_file_association = external_define("external_library.dll", "GetFileAssociation", dll_cdecl, ty_string, 1, ty_string); // string with file ext for example ".txt"
 global.open_path = external_define("external_library.dll", "OpenExplorer", dll_cdecl, ty_real, 1, ty_string); // path
-global.open_file_program = external_define("external_library.dll", "OpenFileProgram", dll_cdecl, ty_real, 2, ty_string, ty_string); // path, program
+global.runas_file_program = external_define("external_library.dll", "OpenFileProgram", dll_cdecl, ty_real, 2, ty_string, ty_string); // path, program (if no program its open with the default program, if program then it uses program to open the path)
 global.run_cmd = external_define("external_library.dll", "Execute", dll_cdecl, ty_real, 3, ty_string, ty_string, ty_string); // program, arguments, dir
 global.run_cmd_SHOW = external_define("external_library.dll", "ExecuteSHOW", dll_cdecl, ty_real, 3, ty_string, ty_string, ty_string); // program, arguments, dir
 
@@ -39,11 +38,11 @@ function open_file(dname) {
 	show_debug_message(path);
 	// final check
 	if (program == "") program = undefined;
-	external_call(global.open_file_program, path, program);
+	external_call(global.runas_file_program, path, program);
 }
 #endregion
 
-#region clipboard and images
+#region images
 
 function try_get_clipboard_sprite() { // needs alarm[0] to load the dump
 	if (ex_clipboard_has_img() == 0) return undefined;
@@ -61,12 +60,22 @@ function try_get_clipboard_sprite() { // needs alarm[0] to load the dump
 global.load_image = external_define("external_library.dll", "load_image", dll_cdecl, ty_real, 2, ty_string, ty_string); // write image data to a buffer
 global.image_info = external_define("external_library.dll", "get_image_info", dll_cdecl, ty_real, 2, ty_string, ty_string); // write image info to a buffer
 
+global.save_png = external_define("external_library.dll", "save_png", dll_cdecl, ty_real, 4, ty_string, ty_string, ty_real, ty_real); // path, buffer data, width, height
+
+
+// change these to work with image_resource struct, the iamge map already stores arrays with pixe ldata, width and height
+
 function load_and_store_image(_file) {
+	
+	if (!file_exists(_file)) {
+		new debug_text("image not found", c_red);
+		return undefined;
+	}
 	
 	// Create a buffer for width & height (2 integers)
 	var info_buffer = buffer_create(12, buffer_fixed, 1); // 8 bytes (3 * 4-byte integers)
 
-	if (external_call(global.image_info, "test_dump.png", buffer_get_address(info_buffer)) == 0) {
+	if (external_call(global.image_info, _file, buffer_get_address(info_buffer)) == 0) {
 		new debug_text("image info failed", c_red);
 		return undefined;
 	}
@@ -79,12 +88,11 @@ function load_and_store_image(_file) {
 
 	buffer_delete(info_buffer); // Delete width/height buffer
 
-
 	// Create a buffer to store the image data
 	var img_buffer = buffer_create(size, buffer_fixed, 1);
-
+	
 	// Call DLL function to load the image into the buffer
-	if (external_call(global.load_image, "test_dump.png", buffer_get_address(img_buffer)) == 0) {
+	if (external_call(global.load_image, _file, buffer_get_address(img_buffer)) == 0) {
 		new debug_text("image load failed", c_red);
 		return undefined;
 	}
@@ -128,6 +136,61 @@ function free_stored_image(_image_id) {
 	buffer_delete(data[0]);
 	ds_map_delete(IMAGE_MAP, _image_id);
 }
+
+function save_stored_image_to_png(_image_id, _path, _fname) { // this is kind of unneeded as the images are either dumped to png or from local source or downloaded from youtube
+	if (!ds_map_exists(IMAGE_MAP, _image_id)) {
+		new debug_text("image not found");
+		return;
+	}
+	var data = ds_map_find_value(IMAGE_MAP, _image_id); // IMAGE_MAP containts arrays with buffer, width and height
+	var buffer = buffer_get_address(data[0]);
+	var fname_append = 1;
+	var temp_fname = _fname;
+	if (file_exists(_path+_fname+".png")) {
+		do {
+			temp_fname = _fname + string(fname_append++);
+		} until (!file_exists(_path+temp_fname+".png"));
+	}
+	_fname = temp_fname;
+	if (external_call(global.save_png, _path + _fname + ".png", buffer, data[1], data[2]) == 0) {
+		new debug_text("image save failed");
+	}
+}
+
+
+#endregion
+
+#region others
+
+// Load the functions from the DLL
+global.drop_handler_register = external_define("external_library.dll", "RegisterDragDropHandler", dll_cdecl, ty_real, 1, ty_string);
+global.drop_handler_unregister = external_define("external_library.dll", "UnregisterDragDropHandler", dll_cdecl, ty_real, 1, ty_string);
+global.check_dragging = external_define("external_library.dll", "IsDraggingFile", dll_cdecl, ty_real, 0);
+
+global.drop_handler_get_file_count = external_define("external_library.dll", "GetDroppedFileCount", dll_cdecl, ty_real, 0);
+global.drop_handler_get_drop_file = external_define("external_library.dll", "GetDroppedFile", dll_cdecl, ty_string, 1, ty_real);
+global.drop_handler_clear_files = external_define("external_library.dll", "ClearDroppedFiles", dll_cdecl, ty_real, 0);
+
+
+global.drop_handler_file_ext_filter = [ ".mp3", ".txt", ".png", ".jpg" ];
+function get_drop_handler_files() {
+	var ext = global.drop_handler_file_ext_filter;
+	var n = external_call(global.drop_handler_get_file_count);
+	var array = array_create(0);
+	
+	for (var i=0; i<n; i++) {
+		var filename = external_call(global.drop_handler_get_drop_file, i);
+		for (var j=0; j<array_length(ext); j++) {
+			if (filename_ext(filename) != ext[j]) continue;
+			array_push(array, filename);
+			break;
+		}
+	}
+	// clear the files
+	external_call(global.drop_handler_clear_files);
+	return array;
+}
+
 
 #endregion
 

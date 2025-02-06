@@ -1,7 +1,8 @@
-self.files = [];
+files = [];
 
 clipboard_string = "no image data";
-image_id = undefined;
+image_drop_trigger = false;
+draw_image_id = undefined;
 no_image_id_error = true;
 
 open_folder(DOWNLOADS);
@@ -11,13 +12,14 @@ timer = 0;
 
 test_value = 0;
 
+file_drop_trigger = false;
 
 // yt
 yt_request_id = undefined;
 yt_request_url = undefined;
 yt_thumbnail_download_request = undefined;
 
-
+hide_cursor_bool = false;
 
 
 //// Create the buffer to store the pixel data (width * height * 4 for RGBA)

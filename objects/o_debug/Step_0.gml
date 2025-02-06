@@ -1,12 +1,22 @@
 
 #region update
 
-// file dropper
-var array = file_dropper_get_files();
-file_dropper_flush();
-if (array_length(array) > 0) {
-    self.files = array;
+// drop handler
+global.dragging_file = external_call(global.check_dragging);
+if (global.dragging_file) {
+	file_drop_trigger = false;
+	image_drop_trigger = false;
+	files = [];
+} else {
+	if (!file_drop_trigger) {
+		file_drop_trigger = true;
+		// drop handler
+		var array = get_drop_handler_files();
+		if (array_length(array) > 0) files = array;	
+	}
 }
+
+
 
 
 
@@ -19,10 +29,16 @@ if (array_length(files) > 0 and keyboard_check_pressed(vk_enter)) {
 	open_file(files[0]);
 }
 
+if (array_length(files) > 0 and filename_ext(files[0]) == ".png" and !image_drop_trigger) {
+	image_drop_trigger = true;
+	draw_image_id = load_and_store_image(files[0]);
+	no_image_id_error = true;
+	save_stored_image_to_png(draw_image_id, FILES, "test");
+}
 
 if (keyboard_check(vk_control) and keyboard_check_pressed(ord("V"))) try_get_clipboard_sprite();
 
-if (keyboard_check_pressed(ord("Q"))) {
+if (keyboard_check_pressed(ord("Q"))) { // example of passing pointer to a buffer to dll
 	var value_buffer = buffer_create(4, buffer_fixed, 1); // one 4 byte integer
 	buffer_write(value_buffer, buffer_u32, test_value);
 	

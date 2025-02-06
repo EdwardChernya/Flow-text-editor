@@ -12,8 +12,6 @@
   "Folders":[
     {"$GMFolder":"","%Name":"Fonts","folderPath":"folders/Fonts.yy","name":"Fonts","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Imported","folderPath":"folders/Imported.yy","name":"Imported","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"File Dropper","folderPath":"folders/Imported/File Dropper.yy","name":"File Dropper","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"File Dropper Demo","folderPath":"folders/Imported/File Dropper/File Dropper Demo.yy","name":"File Dropper Demo","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Objects","folderPath":"folders/Objects.yy","name":"Objects","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Rooms","folderPath":"folders/Rooms.yy","name":"Rooms","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Scripts","folderPath":"folders/Scripts.yy","name":"Scripts","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -23,8 +21,6 @@
   ],
   "IncludedFiles":[
     {"$GMIncludedFile":"","%Name":"download.py","CopyToMask":-1,"filePath":"datafiles","name":"download.py","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"output.txt","CopyToMask":-1,"filePath":"datafiles/Downloads","name":"output.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"test file.mp3","CopyToMask":-1,"filePath":"datafiles/Downloads","name":"test file.mp3","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"external_library.dll","CopyToMask":-1,"filePath":"datafiles","name":"external_library.dll","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"run_download.bat","CopyToMask":-1,"filePath":"datafiles","name":"run_download.bat","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
   ],
@@ -36,19 +32,13 @@
   "name":"Flow text-editor",
   "resources":[
     {"id":{"name":"external_library","path":"extensions/external_library/external_library.yy",},},
-    {"id":{"name":"FileDropper","path":"extensions/FileDropper/FileDropper.yy",},},
-    {"id":{"name":"FDefault","path":"fonts/FDefault/FDefault.yy",},},
     {"id":{"name":"fnt_medium20","path":"fonts/fnt_medium20/fnt_medium20.yy",},},
     {"id":{"name":"fnt_medium26","path":"fonts/fnt_medium26/fnt_medium26.yy",},},
     {"id":{"name":"fnt_regular14","path":"fonts/fnt_regular14/fnt_regular14.yy",},},
-    {"id":{"name":"Changelog","path":"notes/Changelog/Changelog.yy",},},
     {"id":{"name":"o_debug","path":"objects/o_debug/o_debug.yy",},},
     {"id":{"name":"o_system","path":"objects/o_system/o_system.yy",},},
-    {"id":{"name":"rm_file_demo","path":"rooms/rm_file_demo/rm_file_demo.yy",},},
+    {"id":{"name":"rm_main","path":"rooms/rm_main/rm_main.yy",},},
     {"id":{"name":"dll_functions","path":"scripts/dll_functions/dll_functions.yy",},},
-    {"id":{"name":"file_dropper_get_files","path":"scripts/file_dropper_get_files/file_dropper_get_files.yy",},},
-    {"id":{"name":"file_dropper_version","path":"scripts/file_dropper_version/file_dropper_version.yy",},},
-    {"id":{"name":"file_dropper","path":"scripts/file_dropper/file_dropper.yy",},},
     {"id":{"name":"init","path":"scripts/init/init.yy",},},
     {"id":{"name":"initialize_editor","path":"scripts/initialize_editor/initialize_editor.yy",},},
     {"id":{"name":"resource_functions","path":"scripts/resource_functions/resource_functions.yy",},},
@@ -58,7 +48,7 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"rm_file_demo","path":"rooms/rm_file_demo/rm_file_demo.yy",},},
+    {"roomId":{"name":"rm_main","path":"rooms/rm_main/rm_main.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[

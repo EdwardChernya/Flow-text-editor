@@ -32,9 +32,24 @@ global.image_id_counter = 0;
 
 
 
+// dra and drop features
+global.window_handle = window_handle();
+// Register the drag-drop handler
+external_call(global.drop_handler_register, global.window_handle);
+global.dragging_file = false;
 
 
 
 
 
+
+}
+
+
+// game end code
+function deinitialize_editor() {
+	
+ds_map_destroy(IMAGE_MAP);
+external_call(global.drop_handler_unregister);
+	
 }
